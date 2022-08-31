@@ -1,5 +1,4 @@
 Created a Product List and Cart Page Using React as frontend
-the live link can be found here-: https://productlistreact.netlify.app/
 
 To run the Project locally run npm install to install the dependencies and 
 
