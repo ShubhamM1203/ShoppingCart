@@ -30,7 +30,7 @@ export const productReducer = (state, action) => {
     case "FILTER_BY_RATING":
       return { ...state, byRating: action.payload };
     case "FILTER_BY_SEARCH":
-      return { ...state, searchQuery: action.payload };
+      return { ...state, searchQuery: action.payload.toLowerCase().trim() };
     case "CLEAR_FILTERS":
       return { byStock: false, byFastDelivery: false, byRating: 0 };
     default:
