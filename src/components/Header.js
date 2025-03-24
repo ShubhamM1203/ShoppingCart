@@ -19,12 +19,15 @@ const Header = () => {
     dispatch,
     productDispatch,
   } = CartState();
+  const location = useLocation()
 
   return (
     <Navbar bg="dark" variant="dark" style={{ height: 80 }}>
       <Container>
         <Navbar.Brand>
-          <Link to="/">Product List </Link>
+          {location.pathname === "/cart" ? 
+            <h3> Cart List </h3>
+          : <h3> Product List </h3> }
         </Navbar.Brand>
         {useLocation().pathname.split("/")[1] !== "cart" && (
           <Navbar.Text className="search">
@@ -45,43 +48,62 @@ const Header = () => {
         )}
         <Nav>
           <Dropdown alignRight>
-            <Dropdown.Toggle variant="success">
-              <FaShoppingCart color="white" fontSize="25px" />
-              <Badge>{cart.length}</Badge>
-            </Dropdown.Toggle>
-
+            { location.pathname !== '/cart' ?
+              <Dropdown.Toggle variant="success">
+                <FaShoppingCart color="white" fontSize="25px" />
+                <Badge>{cart.length}</Badge>
+              </Dropdown.Toggle>
+            : <Link to='/'>
+              <h6 style={{ color: "white" }}>Back to Product List Page</h6>
+            </Link>}
             <Dropdown.Menu style={{ minWidth: 370 }}>
               {cart.length > 0 ? (
                 <>
-                  {cart.map((prod) => (
-                    <span className="cartitem" key={prod.id}>
-                      <img
-                        src={prod.image}
-                        className="cartItemImg"
-                        alt={prod.name}
-                      />
-                      <div className="cartItemDetail">
-                        <span>{prod.name}</span>
-                        <span>₹ {prod.price.split(".")[0]}</span>
-                      </div>
-                      <AiFillDelete
-                        fontSize="20px"
-                        style={{ cursor: "pointer" }}
-                        onClick={() =>
-                          dispatch({
-                            type: "REMOVE_FROM_CART",
-                            payload: prod,
-                          })
-                        }
-                      />
-                    </span>
-                  ))}
+                {cart.slice(0, 4).map((prod) => (
+                  <span className="cartitem" key={prod.id}>
+                    <img
+                      src={prod.image}
+                      className="cartItemImg"
+                      alt={prod.name}
+                    />
+                    <div className="cartItemDetail">
+                      <span>{prod.name}</span>
+                      <span>₹ {prod.price.split(".")[0]}</span>
+                    </div>
+                    <AiFillDelete
+                      fontSize="20px"
+                      style={{ cursor: "pointer" }}
+                      onClick={() =>
+                        dispatch({
+                          type: "REMOVE_FROM_CART",
+                          payload: prod,
+                        })
+                      }
+                    />
+                  </span>
+                ))}
+
+                {cart.length > 4 && (
                   <Link to="/cart">
-                    <Button style={{ width: "95%", margin: "0 10px" }}>
-                      Go To Cart
-                    </Button>
+                    <span
+                      style={{
+                        display: "block",
+                        textAlign: "center",
+                        padding: "10px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      More items
+                    </span>
                   </Link>
-                </>
+                )}
+
+                <Link to="/cart">
+                  <Button style={{ width: "95%", margin: "0 10px" }}>
+                    Go To Cart
+                  </Button>
+                </Link>
+              </>
               ) : (
                 <span style={{ padding: 10 }}>Cart is Empty!</span>
               )}
